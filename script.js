@@ -6,7 +6,7 @@ function loadClient() {
 function initClient() {
     gapi.client.init({
         apiKey: 'AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4',  // Replace with your API key
-        clientId: '540030881274-5tsuuk9vpa1vdvodatgl2c1qviqsk6h4.apps.googleusercontent.com',  // Replace with your Client ID
+        clientId: '540030881274-c4ars04kg2fegiq2l5jav76clt7eilrf.apps.googleusercontent.com',  // Replace with your Client ID
         discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
         scope: 'https://www.googleapis.com/auth/drive.readonly'
     }).then(function () {
