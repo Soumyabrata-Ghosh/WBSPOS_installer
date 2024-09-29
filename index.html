@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Step Wizard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .wizard-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 75%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .breadcrumb-item {
+            margin: 0 5px;
+        }
+
+        .breadcrumb-item.active {
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #007BFF;
+            width: 33%;
+            border-radius: 5px;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .options {
+            margin: 10px 0;
+        }
+
+        .option {
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0; /* Adjust spacing between buttons */
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .option:hover {
+            background-color: #0056b3;
+        }
+
+        .note {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .cancel-btn {
+            background-color: #dc3545;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0; /* Adjust spacing between buttons */
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background-color: #c82333;
+        }
+
+        .download-btn {
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0; /* Adjust spacing between buttons */
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+	<script src="https://apis.google.com/js/api.js"></script>
+	<script src="script.js"></script>
+</head>
+<body>
+    <div class="wizard-container">
+        <div class="breadcrumb">
+            <span class="breadcrumb-item active" id="step1-breadcrumb">Installation Type</span>
+            <span class="breadcrumb-item"> > </span>
+            <span class="breadcrumb-item" id="step2-breadcrumb">Terminal Type</span>
+            <span class="breadcrumb-item"> > </span>
+            <span class="breadcrumb-item" id="step3-breadcrumb">Software Download</span> 
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+
+        <form id="step1" class="step active">
+            <h2>Installation Type</h2>
+            <p>Do you want to install POS Server or Terminal?</p>
+            <div class="options">
+                <button type="button" class="option" onclick="goToStep2('POS Server')">POS Server</button>
+            </div>
+            <div class="options">
+                <button type="button" class="option" onclick="goToStep2('POS Terminal')">POS Terminal</button>
+            </div>
+        </form>
+
+        <form id="step2" class="step">
+            <h2>Terminal Type</h2>
+            <p>Do you have an Empty Box PC or a running PC?</p>
+            <div class="options">
+                <button type="button" class="option" onclick="goToStep3('Empty Box')">Empty Box</button>
+            </div>
+            <div class="options">
+                <button type="button" class="option" onclick="goToStep3('Existing Windows')">Existing Windows</button>
+            </div>
+            <p class="note">Selected Installation Type: <span id="selected-installation-type-step2"></span></p> 
+            <p class="note">Note: The installer will replace your existing OS or install a new OS.</p>
+            <button type="button" class="cancel-btn" onclick="goToStep1()">Back</button>
+        </form>
+
+        <form id="step3" class="step">
+            <h2 id="step3-header">Software Download</h2> 
+            <p>Your choices:</p>
+            <p id="chosen-options"></p>
+            <p class="note">Selected Installation Type: <span id="selected-installation-type-step3"></span></p> 
+            <button type="button" class="download-btn" id="download-btn">Download Software</button> 
+            <button type="button" class="cancel-btn" onclick="goToStep2()">Back</button>
+        </form>
+    </div>
+
+    <script>
+        let selectedOptions = {
+            step1: '',
+            step2: ''
+        };
+
+        function updateBreadcrumb(step) {
+            document.querySelectorAll('.breadcrumb-item').forEach(item => item.classList.remove('active'));
+            document.getElementById(`step${step}-breadcrumb`).classList.add('active');
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.step').forEach(form => form.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+        }
+
+        function updateProgressBar(step) {
+            const progressWidth = step * 33.33;
+            document.querySelector('.progress').style.width = `${progressWidth}%`;
+        }
+
+        function updateInstallationType() {
+            const installationTypeElementsStep2 = document.querySelectorAll('#selected-installation-type-step2');
+            const installationTypeElementsStep3 = document.querySelectorAll('#selected-installation-type-step3');
+
+            installationTypeElementsStep2.forEach(element => {
+                element.textContent = selectedOptions.step1;
+            });
+
+            installationTypeElementsStep3.forEach(element => {
+                element.textContent = selectedOptions.step1;
+            });
+        }
+
+        function goToStep2(option) {
+            selectedOptions.step1 = option;
+            showStep(2);
+            updateProgressBar(2);
+            updateBreadcrumb(2);
+            updateInstallationType();
+        }
+
+        function goToStep3(option) {
+            selectedOptions.step2 = option;
+            showStep(3);
+            updateProgressBar(3);
+            updateBreadcrumb(3);
+            updateInstallationType();
+            const chosenOptions = `Installation Type: ${selectedOptions.step1}, Terminal Type: ${selectedOptions.step2}`;
+            document.getElementById('chosen-options').innerText = chosenOptions;
+
+            // Update header and button based on selected option
+            const step3Header = document.getElementById('step3-header');
+            const downloadBtn = document.getElementById('download-btn');
+
+            if (option === 'Empty Box') {
+                step3Header.textContent = "Attach USB (50 GB Free) and click below button";
+                downloadBtn.textContent = "Create bootable USB";
+            } else {
+                step3Header.textContent = "Click below button to download then install software";
+                downloadBtn.textContent = "Download Software";
+            }
+        }
+
+        function goToStep1() {
+            showStep(1);
+            updateProgressBar(1);
+            updateBreadcrumb(1);
+        }
+
+    </script>
+</body>
+</html>
