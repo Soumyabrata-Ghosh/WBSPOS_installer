@@ -266,7 +266,28 @@
             updateProgressBar(1);
             updateBreadcrumb(1);
         }
+        // Get references to DOM elements
+        const folderPicker = document.getElementById('directoryPicker');
+        const folderForm = document.getElementById('step3');
+        //const folderPath = document.getElementById('folderPath');
+        
+        // Prevent the form from submitting when the folder is selected
+        folderForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+        });
 
+        // Event listener for when a folder is selected
+        folderPicker.addEventListener('change', function(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                // Display the folder path
+                const folder = files[0].webkitRelativePath.split('/')[0];
+                //folderPath.textContent = `Selected folder: ${folder}`;
+                
+                // Now you can use the selected folder for other actions
+                console.log("Folder selected:", folder);
+            }
+        });
     </script>
 </body>
 </html>
