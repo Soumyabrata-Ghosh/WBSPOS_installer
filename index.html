@@ -172,7 +172,6 @@
 	    <h1>Select Flash Drive and Download Google Drive Folder</h1>
 	    <input type="file" id="directoryPicker" webkitdirectory directory multiple />
 	    <button id="downloadButton">Download Google Drive Folder</button>
-	    <pre id="log"></pre>
             <button type="button" class="download-btn" onclick="downloadGoogleDriveFolder('1DxfbdznZtrs9JqsY95PAtSM6m5PhgllE')">Download Software</button> 
             <button type="button" class="cancel-btn" onclick="goToStep2()">Back</button>
         </form>
@@ -266,7 +265,7 @@
                 //folderPath.textContent = `Selected folder: ${folder}`;
                 
                 // Now you can use the selected folder for other actions
-                console.log("Folder selected:", folder);
+                alert("Folder selected:" = folder);
             }
         });
     </script>
