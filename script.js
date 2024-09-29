@@ -16,6 +16,7 @@ function initClient() {
 
 async function downloadGoogleDriveFolder(folderId) {
     // Fetch the list of files in the Google Drive folder
+    alert("Downloading files")
     let response = await gapi.client.drive.files.list({
         q: `'${folderId}' in parents`,
         fields: 'files(id, name, md5Checksum)',
