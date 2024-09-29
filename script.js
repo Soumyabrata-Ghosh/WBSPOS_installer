@@ -14,11 +14,6 @@ function initClient() {
     });
 }
 
-document.getElementById('download-btn').addEventListener('click', function () {
-    const folderId = '1DxfbdznZtrs9JqsY95PAtSM6m5PhgllE';  // Replace with actual Google Drive folder ID
-    downloadGoogleDriveFolder(folderId);
-});
-
 async function downloadGoogleDriveFolder(folderId) {
     // Fetch the list of files in the Google Drive folder
     let response = await gapi.client.drive.files.list({
