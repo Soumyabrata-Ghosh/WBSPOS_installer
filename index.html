@@ -249,7 +249,7 @@
         // Get references to DOM elements
         const folderPicker = document.getElementById('directoryPicker');
         const folderForm = document.getElementById('step3');
-        //const folderPath = document.getElementById('folderPath');
+        
         
         // Prevent the form from submitting when the folder is selected
         folderForm.addEventListener('submit', function(event) {
@@ -262,10 +262,9 @@
             if (files.length > 0) {
                 // Display the folder path
                 const folder = files[0].webkitRelativePath.split('/')[0];
-                //folderPath.textContent = `Selected folder: ${folder}`;
                 
                 // Now you can use the selected folder for other actions
-                alert("Folder selected:" = folder);
+                alert("Folder selected:" + folder);
             }
         });
     </script>
