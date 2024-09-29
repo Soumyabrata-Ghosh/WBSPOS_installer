@@ -14,7 +14,7 @@ function initClient() {
     });
 }
 
-document.getElementById('downloadButton').addEventListener('click', function () {
+document.getElementById('download-Button').addEventListener('click', function () {
     const folderId = '1DxfbdznZtrs9JqsY95PAtSM6m5PhgllE';  // Replace with actual Google Drive folder ID
     downloadGoogleDriveFolder(folderId);
 });
