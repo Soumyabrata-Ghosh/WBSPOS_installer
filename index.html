@@ -124,25 +124,6 @@
     </style>
 	<script src="https://apis.google.com/js/api.js"></script>
 	<script src="script.js"></script>
-    <script>
-        document.getElementById('openFileButton').addEventListener('click', async () => {
-            try {
-                // Open the file picker
-                const [fileHandle] = await window.showOpenFilePicker();
-                const file = await fileHandle.getFile();
-
-                // Display the file name and size
-                document.getElementById('output').textContent = `File: ${file.name}, Size: ${file.size} bytes`;
-
-                // Optional: Read and display the file contents (assuming it's text)
-                const fileContents = await file.text();
-                console.log('File contents:', fileContents);
-            } catch (error) {
-                console.error('Error opening file:', error);
-                document.getElementById('output').textContent = `Error: ${error.message}`;
-            }
-        });
-    </script>
 </head>
 <body>
     <div class="wizard-container">
