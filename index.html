@@ -267,6 +267,99 @@
                 // alert("Folder selected:" + folder);
             }
         });
+        const API_KEY = 'YOUR_API_KEY';  // Replace with your Google API Key
+        const FOLDER_ID = 'YOUR_GOOGLE_DRIVE_FOLDER_ID';  // Replace with your public Google Drive Folder ID
+
+        // Log messages for user
+        function log(message) {
+            const logElement = document.getElementById('log');
+            logElement.textContent += message + '\n';
+        }
+
+        // Load the GAPI client and Google Drive API
+        function gapiLoaded() {
+            gapi.load('client', initializeGapiClient);
+        }
+
+        // Initialize the Google API client with API key
+        async function initializeGapiClient() {
+            await gapi.client.init({
+                apiKey: API_KEY,
+                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+            });
+            log('Google API client initialized.');
+        }
+
+        // Fetch and download the contents of a public Google Drive folder
+        async function downloadGoogleDriveFolder(folderId) {
+            let response = await gapi.client.drive.files.list({
+                q: `'${folderId}' in parents and trashed=false`,
+                fields: 'files(id, name, mimeType, md5Checksum)',
+                pageSize: 1000,
+            });
+
+            let files = response.result.files;
+
+            if (!files || files.length === 0) {
+                log('No files found in the folder.');
+                return;
+            }
+
+            const directoryPicker = document.getElementById('directoryPicker').files;
+            if (directoryPicker.length === 0) {
+                log('No local folder selected.');
+                return;
+            }
+
+            const localFolder = directoryPicker[0].webkitRelativePath.split('/')[0];
+
+            for (let file of files) {
+                const fileResponse = await gapi.client.drive.files.get({
+                    fileId: file.id,
+                    alt: 'media'
+                }, { responseType: 'blob' });
+
+                const blob = fileResponse.body;
+                saveFile(blob, file.name, localFolder);
+
+                const localMD5 = await calculateMD5(blob);
+                if (localMD5 !== file.md5Checksum) {
+                    log(`File integrity check failed for ${file.name}.`);
+                } else {
+                    log(`File ${file.name} downloaded and verified.`);
+                }
+            }
+        }
+
+        // Save file to local drive
+        function saveFile(blob, fileName, folder) {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `${folder}/${fileName}`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        // Calculate the MD5 checksum for file integrity
+        function calculateMD5(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const buffer = event.target.result;
+                    crypto.subtle.digest('MD5', buffer).then(hash => {
+                        const hashArray = Array.from(new Uint8Array(hash));
+                        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                        resolve(hashHex);
+                    }).catch(reject);
+                };
+                reader.readAsArrayBuffer(blob);
+            });
+        }
+
+        // Load the GAPI client when the DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            gapiLoaded();
+        });
     </script>
 </body>
 </html>
