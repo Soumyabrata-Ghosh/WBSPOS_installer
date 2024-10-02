@@ -169,10 +169,7 @@
             <p>Your choices:</p>
             <p id="chosen-options"></p>
             <p class="note">Selected Installation Type: <span id="selected-installation-type-step3"></span></p> 
-	    <h1>Select Flash Drive and Download Google Drive Folder</h1>
-	    <input type="file" id="directoryPicker" webkitdirectory directory multiple />
-	    <button id="downloadButton">Download Google Drive Folder</button>
-            <button type="button" class="download-btn" id="download-btn" onclick="downloadGoogleDriveFolder('1DxfbdznZtrs9JqsY95PAtSM6m5PhgllE')">Download Software</button> 
+            <button type="button" class="download-btn" id="download-btn" onclick="return false;">Download Software</button> 
             <button type="button" class="cancel-btn" onclick="goToStep2()">Back</button>
         </form>
     </div>
@@ -233,11 +230,13 @@
             const downloadBtn = document.getElementById('download-btn');
 
             if (option === 'Empty Box') {
-                step3Header.textContent = "Attach USB (50 GB Free) and click below button";
-                downloadBtn.textContent = "Create bootable USB";
+                step3Header.textContent = "Attach USB (50 GB Free), click below button to download then install & run software";
+                downloadBtn.textContent = "Download Software for Empty Box";
+		downloadBtn.onclick = function () { downloadFileempty() };
             } else {
-                step3Header.textContent = "Click below button to download then install software";
-                downloadBtn.textContent = "Download Software";
+                step3Header.textContent = "Click below button to download then install & run software";
+                downloadBtn.textContent = "Download Software for Existing Windows";
+		downloadBtn.onclick = function () { downloadFileexisting() };
             }
         }
 
@@ -360,7 +359,30 @@
         document.addEventListener('DOMContentLoaded', () => {
             gapiLoaded();
         });
-
+        function downloadFileexisting() {
+            // URL of the file you want to download
+            var fileUrl = 'https://drive.google.com/file/d/1cEhf7JyTuM3OQoJbggH2Lejg3-nuZfop/view?usp=sharing';
+            
+            // Create a hidden <a> element, set its download attribute, and trigger a click
+            var a = document.createElement('a');
+            a.href = fileUrl;
+            a.download = ''; // Leave blank if the file name should come from the server
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);  // Clean up the element after the click
+        }
+        function downloadFileempty() {
+            // URL of the file you want to download
+            var fileUrl = 'https://drive.google.com/file/d/1EwxLlZwxHDG77QhmRxbB59MTEPYBFtmx/view?usp=sharing';
+            
+            // Create a hidden <a> element, set its download attribute, and trigger a click
+            var a = document.createElement('a');
+            a.href = fileUrl;
+            a.download = ''; // Leave blank if the file name should come from the server
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);  // Clean up the element after the click
+        }
     </script>
 </body>
 </html>
