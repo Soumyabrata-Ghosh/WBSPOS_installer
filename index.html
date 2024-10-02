@@ -360,28 +360,78 @@
             gapiLoaded();
         });
         function downloadFileexisting() {
-            // URL of the file you want to download
-            var fileUrl = 'https://www.googleapis.com/drive/v3/files/1cEhf7JyTuM3OQoJbggH2Lejg3-nuZfop?alt=media&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4';
-            
-            // Create a hidden <a> element, set its download attribute, and trigger a click
-            var a = document.createElement('a');
-            a.href = fileUrl;
-            a.download = ''; // Leave blank if the file name should come from the server
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);  // Clean up the element after the click
+            // Step 1: Fetch the file metadata to get the file name
+            fetch(`https://www.googleapis.com/drive/v3/files/1cEhf7JyTuM3OQoJbggH2Lejg3-nuZfop?fields=name&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(metadata => {
+                const fileName = metadata.name; // Extract file name from metadata
+
+                // Step 2: Fetch the actual file content and download it using the retrieved file name
+                fetch(`https://www.googleapis.com/drive/v3/files/1cEhf7JyTuM3OQoJbggH2Lejg3-nuZfop?alt=media&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
+                    method: 'GET',
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;  // Set the file name with extension
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);  // Clean up
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the download:', error);
+                });
+            })
+            .catch(error => {
+                console.error('Failed to fetch file metadata:', error);
+            });
         }
         function downloadFileempty() {
-            // URL of the file you want to download
-            var fileUrl = 'https://www.googleapis.com/drive/v3/files/1EwxLlZwxHDG77QhmRxbB59MTEPYBFtmx?alt=media&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4';
-            
-            // Create a hidden <a> element, set its download attribute, and trigger a click
-            var a = document.createElement('a');
-            a.href = fileUrl;
-            a.download = ''; // Leave blank if the file name should come from the server
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);  // Clean up the element after the click
+            // Step 1: Fetch the file metadata to get the file name
+            fetch(`https://www.googleapis.com/drive/v3/files/1EwxLlZwxHDG77QhmRxbB59MTEPYBFtmx?fields=name&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(metadata => {
+                const fileName = metadata.name; // Extract file name from metadata
+
+                // Step 2: Fetch the actual file content and download it using the retrieved file name
+                fetch(`https://www.googleapis.com/drive/v3/files/1EwxLlZwxHDG77QhmRxbB59MTEPYBFtmx?alt=media&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
+                    method: 'GET',
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;  // Set the file name with extension
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);  // Clean up
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the download:', error);
+                });
+            })
+            .catch(error => {
+                console.error('Failed to fetch file metadata:', error);
+            });
         }
     </script>
 </body>
