@@ -252,11 +252,7 @@
             // Update header and button based on selected option
             const step3Header = document.getElementById('step3-header');
             const downloadBtn = document.getElementById('download-btn');
-            const loadingMessage = document.getElementById('loadingMessage');
 
-            // Show loading message and disable the button to prevent multiple clicks
-            loadingMessage.style.display = 'inline-block';
-            downloadBtn.disabled = true;
 		
             if (option === 'Empty Box') {
                 step3Header.textContent = "Attach USB (50 GB Free), click below button to download then install & run software";
@@ -391,6 +387,12 @@
         function downloadFileexisting() {
 	    const downloadBtn = document.getElementById('download-btn');
 	    downloadBtn.textContent = "Please wait while your software is Downloading";
+            const loadingMessage = document.getElementById('loadingMessage');
+
+            // Show loading message and disable the button to prevent multiple clicks
+            loadingMessage.style.display = 'inline-block';
+            downloadBtn.disabled = true;
+
             // Step 1: Fetch the file metadata to get the file name
             fetch(`https://www.googleapis.com/drive/v3/files/1cEhf7JyTuM3OQoJbggH2Lejg3-nuZfop?fields=name&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
                 method: 'GET'
@@ -430,6 +432,11 @@
         function downloadFileempty() {
 	    const downloadBtn = document.getElementById('download-btn');
 	    downloadBtn.textContent = "Please wait while your software is Downloading";
+            const loadingMessage = document.getElementById('loadingMessage');
+
+            // Show loading message and disable the button to prevent multiple clicks
+            loadingMessage.style.display = 'inline-block';
+            downloadBtn.disabled = true;
             // Step 1: Fetch the file metadata to get the file name
             fetch(`https://www.googleapis.com/drive/v3/files/1EwxLlZwxHDG77QhmRxbB59MTEPYBFtmx?fields=name&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
                 method: 'GET'
