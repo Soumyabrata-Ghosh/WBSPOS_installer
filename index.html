@@ -404,7 +404,7 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);  // Clean up
-
+	    loadingMessage.style.display = 'none';
         }
         function downloadFileempty() {
 	    const downloadBtn = document.getElementById('download-btn');
@@ -426,7 +426,7 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);  // Clean up
-	
+	    loadingMessage.style.display = 'none';
         }
     </script>
 </body>
