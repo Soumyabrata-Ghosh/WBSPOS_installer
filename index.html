@@ -360,6 +360,8 @@
             gapiLoaded();
         });
         function downloadFileexisting() {
+	    const downloadBtn = document.getElementById('download-btn');
+	    downloadBtn.textContent = "Please wait while your software is Downloading";
             // Step 1: Fetch the file metadata to get the file name
             fetch(`https://www.googleapis.com/drive/v3/files/1cEhf7JyTuM3OQoJbggH2Lejg3-nuZfop?fields=name&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
                 method: 'GET'
@@ -397,6 +399,8 @@
             });
         }
         function downloadFileempty() {
+	    const downloadBtn = document.getElementById('download-btn');
+	    downloadBtn.textContent = "Please wait while your software is Downloading";
             // Step 1: Fetch the file metadata to get the file name
             fetch(`https://www.googleapis.com/drive/v3/files/1EwxLlZwxHDG77QhmRxbB59MTEPYBFtmx?fields=name&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
                 method: 'GET'
