@@ -386,100 +386,47 @@
         });
         function downloadFileexisting() {
 	    const downloadBtn = document.getElementById('download-btn');
-	    downloadBtn.textContent = "Please wait while your software is Downloading";
             const loadingMessage = document.getElementById('loadingMessage');
 
             // Show loading message and disable the button to prevent multiple clicks
             loadingMessage.style.display = 'inline-block';
             downloadBtn.disabled = true;
+            // Original Dropbox share URL
+            const dropboxUrl = 'https://www.dropbox.com/scl/fi/f97e4dcy7follykabhe59/WBSPOS-ExistingOS.exe?rlkey=mhovost3kacwx8czvxw109nhm&st=8c2ska71&dl=0';  // Replace with your Dropbox share link
+            
+            // Modify the URL to force download
+            const directDownloadUrl = dropboxUrl.replace('www.dropbox.com', 'dl.dropboxusercontent.com').replace('?dl=0', '');
 
-            // Step 1: Fetch the file metadata to get the file name
-            fetch(`https://www.googleapis.com/drive/v3/files/1cEhf7JyTuM3OQoJbggH2Lejg3-nuZfop?fields=name&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(metadata => {
-                const fileName = metadata.name; // Extract file name from metadata
+            // Create a temporary <a> element to trigger download
+            const a = document.createElement('a');
+            a.href = directDownloadUrl;
+            a.download = ''; // The file will download with its original name from Dropbox
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);  // Clean up
 
-                // Step 2: Fetch the actual file content and download it using the retrieved file name
-                fetch(`https://www.googleapis.com/drive/v3/files/1cEhf7JyTuM3OQoJbggH2Lejg3-nuZfop?alt=media&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
-                    method: 'GET',
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok.');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = fileName;  // Set the file name with extension
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);  // Clean up
-                    document.body.removeChild(a);
-                })
-                .catch(error => {
-                    console.error('There was a problem with the download:', error);
-                });
-            })
-            .catch(error => {
-                console.error('Failed to fetch file metadata:', error);
-            });
         }
         function downloadFileempty() {
 	    const downloadBtn = document.getElementById('download-btn');
-	    downloadBtn.textContent = "Please wait while your software is Downloading";
             const loadingMessage = document.getElementById('loadingMessage');
 
             // Show loading message and disable the button to prevent multiple clicks
             loadingMessage.style.display = 'inline-block';
             downloadBtn.disabled = true;
-            // Step 1: Fetch the file metadata to get the file name
-            fetch(`https://www.googleapis.com/drive/v3/files/1EwxLlZwxHDG77QhmRxbB59MTEPYBFtmx?fields=name&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(metadata => {
-                const fileName = metadata.name; // Extract file name from metadata
+            // Original Dropbox share URL
+            const dropboxUrl = 'https://www.dropbox.com/scl/fi/0ilv3nwmjgogayg72snfz/EmptyBoxSetup.exe?rlkey=r6matk0ecqqjqlj6hvhu6bnwn&st=5rfktke1&dl=0';  // Replace with your Dropbox share link
+            
+            // Modify the URL to force download
+            const directDownloadUrl = dropboxUrl.replace('www.dropbox.com', 'dl.dropboxusercontent.com').replace('?dl=0', '');
 
-                // Step 2: Fetch the actual file content and download it using the retrieved file name
-                fetch(`https://www.googleapis.com/drive/v3/files/1EwxLlZwxHDG77QhmRxbB59MTEPYBFtmx?alt=media&key=AIzaSyBTa4PPAQNBEMuMX51-MoJ92gJk9JO1gz4`, {
-                    method: 'GET',
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok.');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = fileName;  // Set the file name with extension
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);  // Clean up
-                    document.body.removeChild(a);
-                    // Hide loading message and re-enable the button after the download starts
-                    loadingMessage.style.display = 'none';
-                    downloadBtn.disabled = false;
-
-                })
-                .catch(error => {
-                    console.error('There was a problem with the download:', error);
-                    loadingMessage.style.display = 'none';
-                    downloadBtn.disabled = false;
-                });
-            })
-            .catch(error => {
-                console.error('Failed to fetch file metadata:', error);
-                loadingMessage.style.display = 'none';
-                downloadBtn.disabled = false;
-            });
+            // Create a temporary <a> element to trigger download
+            const a = document.createElement('a');
+            a.href = directDownloadUrl;
+            a.download = ''; // The file will download with its original name from Dropbox
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);  // Clean up
+	
         }
     </script>
 </body>
